@@ -114,5 +114,5 @@ class Summarizor():
 
 
 if __name__ == '__main__':
-  api = Summarizor("","virus","Q99zzkOXcr4rJMLX6apAe9xV1","2tjQeRoJ1KuhWp100khCjcs8yCDOUWcSHJSLkVFEinmYjiPWsz","1172962292217999360-yIBAO1UIPNgSmKlkp0cV9801DsoegI","MKtFv7sgeCsfGch8XYDFPevk46FYiNEYaaGRnH8fdEdWq")
+  api = Summarizor("","virus","","","","")
   api.keyToVideo()
