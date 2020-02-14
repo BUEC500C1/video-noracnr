@@ -3,3 +3,4 @@
 import pytest
 import Summarizor
 
+def test_run():
