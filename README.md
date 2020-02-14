@@ -1,12 +1,15 @@
 # video-noracnr
 video-noracnr created by GitHub Classroom
 
-### Main Exercise
+### Part1(in part1 folder)
+* Please run and test the code provided in (Python Threads Versus Processes) and  compare processes and threads
+* ![processVsthread](/part1/thread_cpu_bound.tmp.png)
+
+### Main Exercise(Summerizor.py)
 Using the twitter feed, construct a daily video summarizing a twitter handle day
 * Convert text into an image in a frame
 * Do a sequence of all texts and images in chronological order.
 * Display each video frame for 3 seconds
-
 
 ### Tasks
 1. Establish a processing criteria:
