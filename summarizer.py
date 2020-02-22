@@ -2,7 +2,9 @@ import time
 import re
 import os
 import subprocess
+import configparser
 # Import the twython library for Twitter APIs
+from apiKey import consumer_key, consumer_secret, access_token, access_token_secret
 from twython import Twython
 from twython import TwythonError
 
@@ -10,14 +12,17 @@ from twython import TwythonError
 COUNT = 100
 
 class Summarizer():
-  def __init__(self, keyword="", videoName="", consumer_key="", consumer_secret="", access_token="", access_token_secret=""):
+  def __init__(self, keyword="", videoName="", path="./keys"):
     self.keyword = keyword
     self.Name = videoName
     self.twitter_list = []
-    self.consumer_key = consumer_key
-    self.consumer_secret = consumer_secret
-    self.access_token = access_token
-    self.access_token_secret = access_token_secret
+    config = configparser.ConfigParser()
+    config.read(path)
+    self.consumer_key = config.get('auth', 'consumer_key').strip()
+    self.consumer_secret = config.get('auth', 'consumer_secret').strip()
+    self.access_token = config.get('auth', 'access_token').strip()
+    self.access_token_secret = config.get('auth', 'access_secret').strip()
+    
 
   def filter(self, text):
     """filter the tweet text to spam and pass ffmpeg compile"""
@@ -57,14 +62,12 @@ class Summarizer():
     if len(self.keyword) == 0:
       self.keyword = "coronavirus"
     
-    
     try:
       results = twitter.cursor(twitter.search, q=self.keyword, result_type = 'recent'
                   , count = COUNT, include_entities = True)
       MAX_TWEETS = 30
       for idx, status in enumerate(results):  # 'results' is a generator. It yields tweet objects
         if idx < MAX_TWEETS:
-          #print(idx)
           gap = '\n'
           content = {}
           content['lang'] = status['lang']
@@ -72,10 +75,10 @@ class Summarizer():
           if content['lang'] in SUPPORTED_LANGUAGE:
             if (hashValue not in hash_list) : #or (content["hash"] in twitter_list and content['text'] not in twitter_list)
               hash_list.append(hashValue)
-              # content["entities"] = status['entities']
-              # content["retweet_count"] = status['retweet_count'] # return int
-              # content["favorite_count"] = status['favorite_count'] #return integer or Nullable
+              print(status['text'])
+              print(self.filter(status['text']))
               tweet_list = list(self.filter(status['text']))
+              print("Success")
               for i in range(len(tweet_list)):
                 if (i % 50) == 0:
                   tweet_list.insert(i,gap)
@@ -88,16 +91,14 @@ class Summarizer():
         print("Too many requests!")
       else:
         print(e.error_code)
-    except StopIteration:
-      pass
+    except StopIteration as s:
+      print(s.error_code)
 
     return self.twitter_list
 
   def textToImage(self):
     """Convert text into an image in a frame"""
     for idx,text in enumerate(self.twitter_list):
-      # print("!!!!!!!!!!!!!!!!!!!!!!!!!!")
-      # print(text)
       subprocess.run("ffmpeg -i frame2.png -vf \"drawtext=text=\'{0}\':fontfile=./Lato/Lato-Regular.ttf:fontcolor=white:fontsize=40:x=200:y=250:\" /Users/noracnr/Documents/EC500/video/img/{2}_{1}.jpg".format(text,idx,self.Name),shell=True,check=True)
 
   def imageToVideo(self):
@@ -114,5 +115,5 @@ class Summarizer():
 
 
 if __name__ == '__main__':
-  api = Summarizer("Mancherster City","manchester","","","","")
+  api = Summarizer("Manchester City","manchester","./keys")
   api.keyToVideo()

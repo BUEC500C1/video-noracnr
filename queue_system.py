@@ -4,7 +4,6 @@ import multiprocessing
 import time
 import threading
 from summarizer import Summarizer
-from apiKey import consumer_key, consumer_secret, access_token, access_token_secret
 
 num_worker_threads = 10
 
@@ -24,7 +23,7 @@ def source():
   ]
   source = []
   for key, name in keyName:
-    a = [key, name, consumer_key, consumer_secret, access_token, access_token_secret]
+    a = [key, name]
     print(a)
     source.append(a)
   return source
@@ -36,7 +35,7 @@ def worker():
     if item is None:
       print("Break ! cuz item is None")
       break
-    api = Summarizer(item[0], item[1], item[2], item[3], item[4], item[5])
+    api = Summarizer(item[0], item[1],"keys")
     api.keyToVideo()
     i += 1
     print("-----Task{0}----".format(i))
