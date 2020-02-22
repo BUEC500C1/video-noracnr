@@ -1,6 +1,6 @@
 # Twitter to Video
 
-### Part1
+### [Part1](https://github.com/BUEC500C1/video-noracnr/tree/master/part1)
 Please see Part1 package with seperate README.md.
 
 ### Main Exercise(Summerizor.py)
