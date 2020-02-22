@@ -32,6 +32,9 @@ You can generate your own object in summarizer.py. For example, if you want to g
 # parameter3: your keys file[ Default Name]
 
 customizedObject = Summarizer("Breaking","news","keys")
+
+# call api and creating news.mp4
+customizedObject.keyToVideo()
 ```
 
 ##### Result
