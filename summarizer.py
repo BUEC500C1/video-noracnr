@@ -69,6 +69,12 @@ class Summarizer():
         if idx < MAX_TWEETS:
           gap = '\n'
           content = {}
+          if os.path.exists("keys"):
+            with open("data.json","w") as f:
+              json.dump(status,f)
+          else:
+            with open("data.json","r") as f:
+              status = json.load(f)
           content['lang'] = status['lang']
           hashValue = hash(status["text"])  #if texts are identical, hash value is same
           if content['lang'] in SUPPORTED_LANGUAGE:
