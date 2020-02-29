@@ -25,11 +25,7 @@ class Summarizer():
     
 
   def filter(self, text):
-    """filter the tweet text to spam and pass ffmpeg compile"""
-    #text = re.sub('RT \@+\w+\:','',text) #delete head of retweet
-    # text = re.sub('\#+\w+\s','',text)     #delete hashtag
     text = re.sub('https://t.co/+\w+.','',text)  #delete url
-    #text = re.sub('\@+\w+(\\n|\s)','',text)    #delete @people  
     text = re.sub('\n','',text)                #delete \n
     text = re.sub('…','',text)
     text = re.sub("'",'',text)
@@ -44,7 +40,6 @@ class Summarizer():
     text = re.sub("-",r'\-',text)
     text = re.sub(";",r'\;',text)
     text = re.sub("@",r'\@',text)
-    # text = re.sub("?",'\?',text)
     return text
 
 
@@ -52,11 +47,7 @@ class Summarizer():
     """return a list of tweets"""
     hash_list = []
     # Fill in your keys and tokens
-    APP_KEY= self.consumer_key
-    APP_SECRET = self.consumer_secret
-    OAUTH_TOKEN = self.access_token
-    OAUTH_TOKEN_SECRET = self.access_token_secret
-    twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    twitter = Twython(self.consumer_key, self.consumer_secret, self.access_token, self.access_token_secret)
 
     SUPPORTED_LANGUAGE = ['zh', 'zh-Hant', 'en']
     if len(self.keyword) == 0:
@@ -99,17 +90,16 @@ class Summarizer():
         print(e.error_code)
     except StopIteration as s:
       print(s.error_code)
-
     return self.twitter_list
 
   def textToImage(self):
     """Convert text into an image in a frame"""
     for idx,text in enumerate(self.twitter_list):
-      subprocess.run("ffmpeg -i frame2.png -vf \"drawtext=text=\'{0}\':fontfile=./Lato/Lato-Regular.ttf:fontcolor=white:fontsize=40:x=200:y=250:\" img/{2}_{1}.jpg".format(text,idx,self.Name),shell=True,check=True)
+      subprocess.run("ffmpeg -i frame2.png -vf \"drawtext=text=\'{0}\':fontfile=./Lato/Lato-Regular.ttf:fontcolor=white:fontsize=40:x=200:y=250:\" /Users/noracnr/Documents/EC500/video/img/{2}_{1}.jpg".format(text,idx,self.Name),shell=True,check=True)
 
   def imageToVideo(self):
     """Convert image to video in chronological order, and play each frame for 3s"""
-    returnCompletedProcess = subprocess.run(r"ffmpeg -r 0.3 -f image2 -s 1200x630 -i img/{0}_\%d.jpg -vcodec libx264 -crf 25 -pix_fmt yuv420p {0}.mp4".format(self.Name), shell=True, check=True)
+    returnCompletedProcess = subprocess.run(r"ffmpeg -r 0.3 -f image2 -s 1200x630 -i /Users/noracnr/Documents/EC500/video/img/{0}_\%d.jpg -vcodec libx264 -crf 25 -pix_fmt yuv420p {0}.mp4".format(self.Name), shell=True, check=True)
     return returnCompletedProcess.returncode
 
   def keyToVideo(self):
@@ -121,5 +111,5 @@ class Summarizer():
 
 
 if __name__ == '__main__':
-  api = Summarizer("Manchester City","manchester","./keys")
+  api = Summarizer("Breaking","news","./keys")
   api.keyToVideo()
